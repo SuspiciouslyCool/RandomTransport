@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:randomtransport/utils/theme.dart';
 import 'package:randomtransport/views/home-view.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Themes.primaryColour,
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'Poppins'),
       ),
       home: HomeView(),
