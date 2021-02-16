@@ -12,13 +12,13 @@ class LookupService {
   Future<Station> getStartingStationData(String name) async {
     Response res;
     try {
-      res = await get("$baseURL/stationboard?station=$name&limit=10")
+      res = await get("$baseURL/locations?query=$name")
           .timeout(timeoutDuration);
       print(res.statusCode);
 
       if (res.statusCode == 200) {
         Map<String, dynamic> body = jsonDecode(res.body);
-        Station station = Station.fromStationLookup(body["station"]);
+        Station station = Station.fromStationLookup(body["stations"][0]);
         return station;
       } else {
         throw "An Error has occured.";

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:randomtransport/components/errorbar.dart';
 import 'package:randomtransport/components/form/formbutton.dart';
 import 'package:randomtransport/components/form/sliderinput.dart';
 import 'package:randomtransport/components/form/textinput.dart';
@@ -64,6 +65,10 @@ class _HomeFormState extends State<HomeForm> {
                     return;
                   }
                   Station startingStation = await lookupService.getStartingStationData(_textInputValue);
+                  if(startingStation==null) {
+                    ScaffoldMessenger.of(context).showSnackBar(stationErrorBar);
+                    return;
+                  }
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => JourneyView(
                       initialStartingStation: startingStation,
