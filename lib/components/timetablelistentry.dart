@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:randomtransport/utils/theme.dart';
 import 'package:randomtransport/utils/types/station.dart';
 
+import '../utils/types/stationtype.dart';
+
 class TimeTableListEntry extends StatelessWidget {
   final Station station;
   final Color backgroundColour;
@@ -30,6 +32,26 @@ class TimeTableListEntry extends StatelessWidget {
                     color: Themes.secondaryColour,
                     width: 5,
                   ),
+                  station.type == StationType.END
+                      ? Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            height: 25,
+                            width: 25,
+                            color: backgroundColour,
+                          ),
+                        )
+                      : Container(),
+                  station.type == StationType.START
+                      ? Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            height: 25,
+                            width: 25,
+                            color: backgroundColour,
+                          ),
+                        )
+                      : Container(),
                   Container(
                     width: 15,
                     height: 15,
