@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:randomtransport/components/ct-bottomsheet.dart';
 import 'package:randomtransport/components/form/formbutton.dart';
 import 'package:randomtransport/utils/theme.dart';
 import 'package:randomtransport/utils/types/station.dart';
@@ -55,7 +56,12 @@ class EndView extends StatelessWidget {
               FormButton(
                 label: "CONTINUE TRAVELS",
                 callback: () async {
-                 
+                 showModalBottomSheet(
+                   context: context,
+                   builder: (BuildContext context) => ContinueTravelsBottomsheet(
+                     initialstartingStation: lastStation,
+                   ),
+                 );
                 },
               ),
             ],
