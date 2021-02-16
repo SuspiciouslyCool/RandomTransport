@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:randomtransport/components/timetablelistentry.dart';
 import 'package:randomtransport/services/lookup/lookupservice.dart';
 import 'package:randomtransport/utils/theme.dart';
+import 'package:randomtransport/utils/types/changes.dart';
 import 'package:randomtransport/utils/types/station.dart';
+import 'package:randomtransport/views/end-view.dart';
 
 class JourneyView extends StatefulWidget {
   final Station initialStartingStation;
@@ -40,6 +43,14 @@ class _JourneyViewState extends State<JourneyView> {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () async {
+          Changes changes = Provider.of<Changes>(context, listen: false);
+          if(changes.changes==0) {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => EndView(),
+            ));
+          }
+          changes.decrement();
+          
           _journeyData = await journey;
           
           setState(() {

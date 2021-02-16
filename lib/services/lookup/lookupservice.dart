@@ -39,6 +39,7 @@ class LookupService {
       Random random = Random();
 
       Map<String, dynamic> connection = connections[random.nextInt(connections.length)];
+      print("passed");
       List<dynamic> passList = connection["passList"];
       
       List<Station> journey = List<Station>();
@@ -48,6 +49,7 @@ class LookupService {
       }
       journey.removeAt(0);
       journey=journey.sublist(0,random.nextInt(journey.length));
+      print("passed2");
       return journey;
 
       // print(stationBoard.journeys);

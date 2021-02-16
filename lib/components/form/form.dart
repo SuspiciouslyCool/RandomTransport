@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:randomtransport/components/form/formbutton.dart';
 import 'package:randomtransport/components/form/sliderinput.dart';
 import 'package:randomtransport/components/form/textinput.dart';
 import 'package:randomtransport/services/lookup/lookupservice.dart';
+import 'package:randomtransport/utils/types/changes.dart';
 import 'package:randomtransport/utils/types/station.dart';
 import 'package:randomtransport/views/journey-view.dart';
 
@@ -27,6 +29,7 @@ class _HomeFormState extends State<HomeForm> {
 
   @override
   Widget build(BuildContext context) {
+    Changes changes = Provider.of<Changes>(context);
     return Center(
         child: Padding(
           padding: const EdgeInsets.all(25),
@@ -67,6 +70,8 @@ class _HomeFormState extends State<HomeForm> {
                     ),
                   ));
                   //TODO: Global Variable for amount of stations left;
+                  changes.setChanges(_sliderInputValue);
+                  print(changes.changes);
                 },
               ),
             ],
