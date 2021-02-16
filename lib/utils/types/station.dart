@@ -21,9 +21,7 @@ class Station {
     if(json["arrivalTimestamp"]!=null) {
       DateTime arrivalTimestamp=DateTime.fromMillisecondsSinceEpoch(json["arrivalTimestamp"]*1000);
       arrival="${arrivalTimestamp.hour}:${arrivalTimestamp.minute}";
-      type=StationType.NORMAL;
     } else {
-      type=StationType.START;
       arrival="";
     }
 
@@ -31,8 +29,9 @@ class Station {
       DateTime departureTimestamp=DateTime.fromMillisecondsSinceEpoch(json["departureTimestamp"]*1000);
       departure="${departureTimestamp.hour}:${departureTimestamp.minute}";
     } else {
-      type=StationType.END;
       departure="";
     }
+
+    type=StationType.NORMAL;
   }
 }

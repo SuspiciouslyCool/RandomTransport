@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:http/http.dart';
 import 'package:randomtransport/utils/types/connection.dart';
 import 'package:randomtransport/utils/types/station.dart';
+import 'package:randomtransport/utils/types/stationtype.dart';
 
 class LookupService {
   final String baseURL = "https://transport.opendata.ch/v1";
@@ -60,6 +61,7 @@ class LookupService {
           }
           journey = journey.sublist(0, rand);
         }
+        journey.last.type=StationType.END;
         return Connection(
           journey: journey,
           number: connection["number"],
