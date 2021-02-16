@@ -65,6 +65,7 @@ class LookupService {
           number: connection["number"],
           op: connection["operator"],
           platform: connection["stop"]["platform"],
+          type: connection["category"],
         );
       } else {
         throw "An Error has occured.";
