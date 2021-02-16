@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:randomtransport/components/form/form.dart';
-import 'package:randomtransport/components/form/textinput.dart';
 import 'package:randomtransport/utils/theme.dart';
 
 class HomeView extends StatelessWidget {

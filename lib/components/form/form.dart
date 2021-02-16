@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:randomtransport/components/form/formbutton.dart';
 import 'package:randomtransport/components/form/sliderinput.dart';
 import 'package:randomtransport/components/form/textinput.dart';
+import 'package:randomtransport/services/lookup/lookupservice.dart';
+import 'package:randomtransport/utils/types/station.dart';
+import 'package:randomtransport/views/journey-view.dart';
 
 class HomeForm extends StatefulWidget {
   @override
@@ -13,9 +16,10 @@ class _HomeFormState extends State<HomeForm> {
   String _textInputValue;
   int _sliderInputValue;
 
+  LookupService lookupService = LookupService();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _textInputValue="";
     _sliderInputValue=0;
@@ -52,8 +56,16 @@ class _HomeFormState extends State<HomeForm> {
               ),
               FormButton(
                 label: "GO!",
-                callback: () {
-                  //TODO: Get Station info from name;
+                callback: () async {
+                  if(_textInputValue==null || _textInputValue=="" || _sliderInputValue==null || _sliderInputValue==0) {
+                    return;
+                  }
+                  Station startingStation = await lookupService.getStartingStationData(_textInputValue);
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => JourneyView(
+                      initialStartingStation: startingStation,
+                    ),
+                  ));
                   //TODO: Global Variable for amount of stations left;
                 },
               ),

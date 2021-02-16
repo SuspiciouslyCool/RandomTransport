@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:randomtransport/utils/theme.dart';
-import 'package:randomtransport/utils/types.dart';
+import 'package:randomtransport/utils/types/types.dart';
 
 class TextInput extends StatefulWidget {
   final String label;
@@ -20,7 +20,6 @@ class _TextInputState extends State<TextInput> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller.text="";
   }

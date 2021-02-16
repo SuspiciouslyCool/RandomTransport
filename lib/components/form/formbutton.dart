@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:randomtransport/utils/theme.dart';
-import 'package:randomtransport/utils/types.dart';
+import 'package:randomtransport/utils/types/types.dart';
 
 class FormButton extends StatelessWidget {
   final OnClickedCallback callback;
