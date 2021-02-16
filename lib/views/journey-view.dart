@@ -45,8 +45,12 @@ class _JourneyViewState extends State<JourneyView> {
         onTap: () async {
           Changes changes = Provider.of<Changes>(context, listen: false);
           if(changes.changes==0) {
+            Navigator.of(context).pop();
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => EndView(),
+              builder: (BuildContext context) => EndView(
+                lastStation: _startingStation,
+                firstStation: widget.initialStartingStation,
+              ),
             ));
           }
           changes.decrement();

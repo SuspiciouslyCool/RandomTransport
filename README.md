@@ -17,8 +17,11 @@ Please choose one of the open issues and assign yourself. You can then fork this
 - Implement error handling on network issues
 - Fix failed assertion if station does not exist
 - ~~Timestamp parsing is still wrong~~
-- UI implementation for endnodes in list
+- UI implementation for start/endnodes in list -> Will mainly be used for connection back
 - Implement endview
+	- ~~Implemented activation on final change~~
+	- Implement connections to start -> Show new List page with multiple connections per page
+	- Implement Continue travels -> Flutter Bottom sheet with new slider
 - Implement geolocation for starting station
 - Fix horizontal overflow in list
 - It is possible for the route to be empty!!!

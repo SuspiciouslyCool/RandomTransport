@@ -69,9 +69,7 @@ class _HomeFormState extends State<HomeForm> {
                       initialStartingStation: startingStation,
                     ),
                   ));
-                  //TODO: Global Variable for amount of stations left;
                   changes.setChanges(_sliderInputValue);
-                  print(changes.changes);
                 },
               ),
             ],
