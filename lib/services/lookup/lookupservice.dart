@@ -48,11 +48,17 @@ class LookupService {
         journey.add(Station.fromJourneyLookup(entry));
       }
       journey.removeAt(0);
-      journey=journey.sublist(0,random.nextInt(journey.length));
-      print("passed2");
-      return journey;
 
-      // print(stationBoard.journeys);
+      if(journey.length>1) {
+        int rand = random.nextInt(journey.length);
+        if(rand==0) {
+          rand=1;
+        }
+        journey=journey.sublist(0,rand);
+        return journey;
+      } else {
+        return journey;
+      }
     } else {
       throw "An Error has occured.";
     }
