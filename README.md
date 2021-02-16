@@ -18,7 +18,8 @@ samples, guidance on mobile development, and a full API reference.
 ## Roadmap
 - Limit amount of rerolls based on slider input -> Provider?
 - Implement error handling on network issues
-- Timestamp parsing is still wrong
+- ~~Timestamp parsing is still wrong~~
 - UI implementation for endnodes in list
 - Implement endview
 - Implement geolocation for starting station
+- Fix horizontal overflow in list

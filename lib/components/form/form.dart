@@ -22,7 +22,7 @@ class _HomeFormState extends State<HomeForm> {
   void initState() {
     super.initState();
     _textInputValue="";
-    _sliderInputValue=0;
+    _sliderInputValue=1;
   }
 
   @override
