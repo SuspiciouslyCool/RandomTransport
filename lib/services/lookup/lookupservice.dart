@@ -47,6 +47,7 @@ class LookupService {
         journey.add(Station.fromJourneyLookup(entry));
       }
       journey.removeAt(0);
+      journey=journey.sublist(0,random.nextInt(journey.length));
       return journey;
 
       // print(stationBoard.journeys);
