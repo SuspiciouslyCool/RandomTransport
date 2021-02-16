@@ -4,6 +4,7 @@ import 'package:randomtransport/components/timetablelistentry.dart';
 import 'package:randomtransport/services/lookup/lookupservice.dart';
 import 'package:randomtransport/utils/theme.dart';
 import 'package:randomtransport/utils/types/changes.dart';
+import 'package:randomtransport/utils/types/connection.dart';
 import 'package:randomtransport/utils/types/station.dart';
 import 'package:randomtransport/views/end-view.dart';
 
@@ -16,8 +17,10 @@ class JourneyView extends StatefulWidget {
 }
 
 class _JourneyViewState extends State<JourneyView> {
-  Future<List<Station>> journey;
+  // Future<List<Station>> connection.journey;
+  Future<Connection> connection;
   List<Station> _journeyData;
+  Connection _connectionData;
   LookupService lookupService = LookupService();
   Station _startingStation;
 
@@ -25,7 +28,8 @@ class _JourneyViewState extends State<JourneyView> {
   void initState() {
     super.initState();
     _startingStation = widget.initialStartingStation;
-    journey = lookupService.getJourneyData(_startingStation);
+    connection = lookupService.getJourneyData(_startingStation);
+    // connection.journey = lookupService.getJourneyData(_startingStation);
   }
 
   @override
@@ -55,11 +59,12 @@ class _JourneyViewState extends State<JourneyView> {
           }
           changes.decrement();
           
-          _journeyData = await journey;
+          // _journeyData = await connection;
+          _connectionData= await connection;
           
           setState(() {
-            _startingStation=_journeyData.last;
-            journey=lookupService.getJourneyData(_startingStation);
+            _startingStation=_connectionData.journey.last;
+            connection=lookupService.getJourneyData(_startingStation);
           });
         },
               child: Container(
@@ -75,14 +80,14 @@ class _JourneyViewState extends State<JourneyView> {
         ),
       ),
       body: FutureBuilder(
-        future: journey,
-        builder: (BuildContext context, AsyncSnapshot<List<Station>> snapshot) {
+        future: connection,
+        builder: (BuildContext context, AsyncSnapshot<Connection> snapshot) {
           if (snapshot.hasData) {
             return ListView(
               children: new List.generate(
-                  snapshot.data.length,
+                  snapshot.data.journey.length,
                   (int index) => TimeTableListEntry(
-                        station: snapshot.data[index],
+                        station: snapshot.data.journey[index],
                         backgroundColour:
                             index % 2 == 0 ? Themes.fillColour : Colors.white,
                       )),
