@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:randomtransport/components/errorbar.dart';
 import 'package:randomtransport/components/timetablelistentry.dart';
 import 'package:randomtransport/services/lookup/lookupservice.dart';
 import 'package:randomtransport/utils/theme.dart';
@@ -30,9 +31,9 @@ class _JourneyViewState extends State<JourneyView> {
   }
 
   void _onAfterBuild(BuildContext context) async {
-    Connection _tmpConnection= await connection;
+    Connection _tmpConnection = await connection;
     setState(() {
-      _connectionData=_tmpConnection;
+      _connectionData = _tmpConnection;
     });
   }
 
@@ -50,31 +51,48 @@ class _JourneyViewState extends State<JourneyView> {
         title: Text(_startingStation.name),
       ),
       bottomNavigationBar: Container(
-        height: _connectionData!=null?120:60,
+        height: _connectionData != null ? 120 : 60,
         child: Column(
           children: [
-            _connectionData!=null?Container(
-                color: Themes.primaryColour,
-                height: 60,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 25,
-                    ),
-                    Text("${_connectionData.type}-${_connectionData.number}",
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
-                    Text("${_connectionData.op}",
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
-                    Text(_connectionData.platform!=null?_connectionData.platform:"",
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
-                    SizedBox(
-                      width: 25,
-                    ),
-                  ],
-                )):Container(),
+            _connectionData != null
+                ? Container(
+                    color: Themes.primaryColour,
+                    height: 60,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 25,
+                        ),
+                        Text(
+                            "${_connectionData.type}-${_connectionData.number}",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20)),
+                        Text("${_connectionData.op}",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20)),
+                        Text(
+                            _connectionData.platform != null
+                                ? _connectionData.platform
+                                : "",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20)),
+                        SizedBox(
+                          width: 25,
+                        ),
+                      ],
+                    ))
+                : Container(),
             GestureDetector(
               onTap: () async {
+                _connectionData = await connection;
+
+                if (_connectionData == null) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(connectionErrorBar);
+                  return;
+                }
+
                 Changes changes = Provider.of<Changes>(context, listen: false);
                 if (changes.changes == 0) {
                   Navigator.of(context).pop();
@@ -86,8 +104,6 @@ class _JourneyViewState extends State<JourneyView> {
                   ));
                 }
                 changes.decrement();
-
-                _connectionData = await connection;
 
                 setState(() {
                   _startingStation = _connectionData.journey.last;
@@ -117,7 +133,8 @@ class _JourneyViewState extends State<JourneyView> {
         future: connection,
         builder: (BuildContext context, AsyncSnapshot<Connection> snapshot) {
           if (snapshot.hasData) {
-            WidgetsBinding.instance.addPostFrameCallback((_) => _onAfterBuild(context));
+            WidgetsBinding.instance
+                .addPostFrameCallback((_) => _onAfterBuild(context));
             return ListView(
               children: new List.generate(
                   snapshot.data.journey.length,
@@ -129,7 +146,11 @@ class _JourneyViewState extends State<JourneyView> {
             );
           } else {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(
+                  Themes.secondaryColour
+                )
+              ),
             );
           }
         },
