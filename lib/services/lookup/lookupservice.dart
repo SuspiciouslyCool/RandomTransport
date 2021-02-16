@@ -72,6 +72,7 @@ class LookupService {
       }
     } catch (e) {
       print(e);
+      print("exception");
       return null;
     }
   }
