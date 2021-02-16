@@ -37,7 +37,7 @@ class TimeTableListEntry extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           child: Container(
                             height: 25,
-                            width: 25,
+                            width: 5,
                             color: backgroundColour,
                           ),
                         )
@@ -47,7 +47,7 @@ class TimeTableListEntry extends StatelessWidget {
                           alignment: Alignment.topCenter,
                           child: Container(
                             height: 25,
-                            width: 25,
+                            width: 5,
                             color: backgroundColour,
                           ),
                         )
