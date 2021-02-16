@@ -4,6 +4,7 @@ import 'package:randomtransport/components/timetablelistentry.dart';
 import 'package:randomtransport/services/lookup/lookupservice.dart';
 import 'package:randomtransport/utils/theme.dart';
 import 'package:randomtransport/utils/types/changes.dart';
+import 'package:randomtransport/utils/types/connection.dart';
 import 'package:randomtransport/utils/types/station.dart';
 import 'package:randomtransport/views/end-view.dart';
 
@@ -16,8 +17,8 @@ class JourneyView extends StatefulWidget {
 }
 
 class _JourneyViewState extends State<JourneyView> {
-  Future<List<Station>> journey;
-  List<Station> _journeyData;
+  Future<Connection> connection;
+  Connection _connectionData;
   LookupService lookupService = LookupService();
   Station _startingStation;
 
@@ -25,7 +26,14 @@ class _JourneyViewState extends State<JourneyView> {
   void initState() {
     super.initState();
     _startingStation = widget.initialStartingStation;
-    journey = lookupService.getJourneyData(_startingStation);
+    connection = lookupService.getJourneyData(_startingStation);
+  }
+
+  void _onAfterBuild(BuildContext context) async {
+    Connection _tmpConnection= await connection;
+    setState(() {
+      _connectionData=_tmpConnection;
+    });
   }
 
   @override
@@ -41,48 +49,80 @@ class _JourneyViewState extends State<JourneyView> {
             icon: Icon(Icons.chevron_left)),
         title: Text(_startingStation.name),
       ),
-      bottomNavigationBar: GestureDetector(
-        onTap: () async {
-          Changes changes = Provider.of<Changes>(context, listen: false);
-          if(changes.changes==0) {
-            Navigator.of(context).pop();
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => EndView(
-                lastStation: _startingStation,
-                firstStation: widget.initialStartingStation,
-              ),
-            ));
-          }
-          changes.decrement();
-          
-          _journeyData = await journey;
-          
-          setState(() {
-            _startingStation=_journeyData.last;
-            journey=lookupService.getJourneyData(_startingStation);
-          });
-        },
+      bottomNavigationBar: Container(
+        height: _connectionData!=null?120:60,
+        child: Column(
+          children: [
+            _connectionData!=null?Container(
+                color: Themes.primaryColour,
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 25,
+                    ),
+                    Text("${_connectionData.type}-${_connectionData.number}",
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    Text("${_connectionData.op}",
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    Text(_connectionData.platform!=null?_connectionData.platform:"",
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    SizedBox(
+                      width: 25,
+                    ),
+                  ],
+                )):Container(),
+            GestureDetector(
+              onTap: () async {
+                Changes changes = Provider.of<Changes>(context, listen: false);
+                if (changes.changes == 0) {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => EndView(
+                      lastStation: _startingStation,
+                      firstStation: widget.initialStartingStation,
+                    ),
+                  ));
+                }
+                changes.decrement();
+
+                _connectionData = await connection;
+
+                setState(() {
+                  _startingStation = _connectionData.journey.last;
+                  connection = lookupService.getJourneyData(_startingStation);
+                });
+              },
               child: Container(
-          color: Themes.primaryColour,
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("NEXT STEP", style: TextStyle(color: Colors.white, fontSize: 24)),
-              Icon(Icons.chevron_right, size: 36, color: Colors.white,)
-            ],
-          )
+                  color: Themes.primaryColour,
+                  height: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("NEXT STEP",
+                          style: TextStyle(color: Colors.white, fontSize: 24)),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 36,
+                        color: Colors.white,
+                      )
+                    ],
+                  )),
+            ),
+          ],
         ),
       ),
       body: FutureBuilder(
-        future: journey,
-        builder: (BuildContext context, AsyncSnapshot<List<Station>> snapshot) {
+        future: connection,
+        builder: (BuildContext context, AsyncSnapshot<Connection> snapshot) {
           if (snapshot.hasData) {
+            WidgetsBinding.instance.addPostFrameCallback((_) => _onAfterBuild(context));
             return ListView(
               children: new List.generate(
-                  snapshot.data.length,
+                  snapshot.data.journey.length,
                   (int index) => TimeTableListEntry(
-                        station: snapshot.data[index],
+                        station: snapshot.data.journey[index],
                         backgroundColour:
                             index % 2 == 0 ? Themes.fillColour : Colors.white,
                       )),

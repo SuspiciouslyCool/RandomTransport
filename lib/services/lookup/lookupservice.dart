@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:http/http.dart';
+import 'package:randomtransport/utils/types/connection.dart';
 import 'package:randomtransport/utils/types/station.dart';
 
 class LookupService {
@@ -11,57 +12,64 @@ class LookupService {
   Future<Station> getStartingStationData(String name) async {
     Response res;
     try {
-      res = await get("$baseURL/stationboard?station=$name&limit=10").timeout(timeoutDuration);
+      res = await get("$baseURL/stationboard?station=$name&limit=10")
+          .timeout(timeoutDuration);
       print(res.statusCode);
-    
-    if (res.statusCode == 200) {
-      Map<String, dynamic> body = jsonDecode(res.body);
-      Station station = Station.fromStationLookup(body["station"]);
-      return station;
-    } else {
-      throw "An Error has occured.";
-    }
+
+      if (res.statusCode == 200) {
+        Map<String, dynamic> body = jsonDecode(res.body);
+        Station station = Station.fromStationLookup(body["station"]);
+        return station;
+      } else {
+        throw "An Error has occured.";
+      }
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<List<Station>> getJourneyData(Station startingStation) async {
+  Future<Connection> getJourneyData(Station startingStation) async {
     Response res;
     try {
-      res = await get("$baseURL/stationboard?id=${startingStation.id}&limit=10").timeout(timeoutDuration);
+      res = await get("$baseURL/stationboard?id=${startingStation.id}&limit=10")
+          .timeout(timeoutDuration);
       print(res.statusCode);
-    
-    if (res.statusCode == 200) {
-      Map<String, dynamic> body = jsonDecode(res.body);
-      List<dynamic> connections =body["stationboard"];
-      Random random = Random();
 
-      Map<String, dynamic> connection = connections[random.nextInt(connections.length)];
-      print("passed");
-      List<dynamic> passList = connection["passList"];
-      
-      List<Station> journey = List<Station>();
+      if (res.statusCode == 200) {
+        Map<String, dynamic> body = jsonDecode(res.body);
+        List<dynamic> connections = body["stationboard"];
+        Random random = Random();
 
-      for (Map<String, dynamic> entry in passList) {
-        journey.add(Station.fromJourneyLookup(entry));
-      }
-      journey.removeAt(0);
+        Map<String, dynamic> connection =
+            connections[random.nextInt(connections.length)];
+        print("passed");
+        List<dynamic> passList = connection["passList"];
 
-      if(journey.length>1) {
-        int rand = random.nextInt(journey.length);
-        if(rand==0) {
-          rand=1;
+        List<Station> journey = List<Station>();
+
+        for (Map<String, dynamic> entry in passList) {
+          journey.add(Station.fromJourneyLookup(entry));
         }
-        journey=journey.sublist(0,rand);
-        return journey;
+        journey.removeAt(0);
+
+        if (journey.length > 1) {
+          int rand = random.nextInt(journey.length);
+          if (rand == 0) {
+            rand = 1;
+          }
+          journey = journey.sublist(0, rand);
+        }
+        return Connection(
+          journey: journey,
+          number: connection["number"],
+          op: connection["operator"],
+          platform: connection["stop"]["platform"],
+          type: connection["category"],
+        );
       } else {
-        return journey;
+        throw "An Error has occured.";
       }
-    } else {
-      throw "An Error has occured.";
-    }
     } catch (e) {
       print(e);
       return null;
