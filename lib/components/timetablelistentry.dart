@@ -89,6 +89,7 @@ class TimeTableListEntry extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: Themes.textColour,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

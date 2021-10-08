@@ -30,7 +30,7 @@ class EndView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "CONGRATULATIONS",
+                "CONGRATS!",
                 style: TextStyle(fontSize: 36, color: Themes.textColour),
               ),
               Text(

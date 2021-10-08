@@ -1,4 +1,4 @@
-package com.example.randomtransport
+package org.suspiciouslycool.randomtransport
 
 import io.flutter.embedding.android.FlutterActivity
 

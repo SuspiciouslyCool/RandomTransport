@@ -47,7 +47,7 @@ class LookupService {
         print("passed");
         List<dynamic> passList = connection["passList"];
 
-        List<Station> journey = List<Station>();
+        List<Station> journey = [];
 
         for (Map<String, dynamic> entry in passList) {
           journey.add(Station.fromJourneyLookup(entry));
