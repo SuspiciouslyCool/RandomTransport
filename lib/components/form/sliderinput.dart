@@ -33,11 +33,11 @@ class _SliderInputState extends State<SliderInput> {
           fontSize: 18,
         ),textAlign: TextAlign.start,),
         Slider(
-          divisions: 24,
+          divisions: 21,
           activeColor: Themes.primaryColour,
           inactiveColor: Themes.fillColour,
           min: 1,
-          max: 25,
+          max: 22,
           label: _currentSliderValue.toInt().toString(),
           value: _currentSliderValue,
           onChanged: (double value) {
